@@ -1,0 +1,41 @@
+root ::= object
+
+object ::= "{" ws fields ws "}"
+
+fields ::= tool_field "," ws args_field
+
+tool_field ::= "\"tool\"" ws ":" ws string
+args_field ::= "\"args\"" ws ":" ws args_object
+
+args_object ::= "{" ws args_content? ws "}"
+
+args_content ::= arg ("," ws arg)*
+
+arg ::= string ws ":" ws value
+
+value ::= string
+        | number
+        | object
+        | array
+        | "true"
+        | "false"
+        | "null"
+
+array ::= "[" ws array_items? ws "]"
+array_items ::= value ("," ws value)*
+
+string ::= "\"" chars "\""
+
+chars ::= char*
+char ::= [^"\\] | "\\" ["\\/bfnrt]
+
+number ::= "-"? int frac? exp?
+
+int ::= "0" | [1-9] digit*
+digit ::= [0-9]
+
+frac ::= "." digit+
+
+exp ::= ("e" | "E") ("+" | "-")? digit+
+
+ws ::= (" " | "\n" | "\t")*
